@@ -1,0 +1,1 @@
+mysql://root:Anshu%40123%23%21@127.0.0.1:3307/vue_with_node
