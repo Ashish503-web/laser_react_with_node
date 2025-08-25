@@ -30,15 +30,15 @@ const connectDB = async () => {
 
         await pool.query(`
      CREATE TABLE IF NOT EXISTS demo_user_data (
-    id INT AUTO_INCREMENT PRIMARY KEY,        -- unique ID
-    first_name VARCHAR(100) NOT NULL,         -- first name
-    last_name VARCHAR(100) NOT NULL,          -- last name
-    email VARCHAR(150) NOT NULL UNIQUE,       -- unique email
-    gender ENUM('male','female','other'),     -- gender
-    password VARCHAR(255) NOT NULL,           -- hashed password
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+          id SERIAL PRIMARY KEY,                   -- auto-increment ID
+          first_name VARCHAR(100) NOT NULL,
+          last_name VARCHAR(100) NOT NULL,
+          email VARCHAR(150) UNIQUE NOT NULL,
+          gender VARCHAR(255),
+          password VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
 
     `);
 

@@ -48,9 +48,10 @@ export const insertRecord = (tableName, record) => {
 
 
 export const getUsersFromDB = (tableName) => {
+     
      return new Promise((resolve, reject) => {
-          const query = `SELECT * FROM vue_with_node.demo_user_data`;
-
+          const query = `SELECT * FROM  ${tableName}`;
+          
           pool.query(query, (err, result ) => {
                if(err){
                     reject(err);
