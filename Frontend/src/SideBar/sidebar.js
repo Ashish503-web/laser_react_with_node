@@ -1,7 +1,7 @@
-import React from "react";
 import { Sidebar } from "primereact/sidebar";
+import { Link } from "react-router-dom";
 
-export default function SideBar({ visible, setVisible }) {
+const SideBar = ({ visible, setVisible }) => {
   return (
     <Sidebar
       visible={visible}
@@ -11,19 +11,18 @@ export default function SideBar({ visible, setVisible }) {
       <ul className="space-y-2 mt-6">
         <li className="flex items-center gap-3 p-3 rounded cursor-pointer hover:bg-white hover:text-green-dark transition">
           <span className="text-lg">🏠</span>
-          <span className="font-medium">Home</span>
+          <Link to="/" className="font-medium">Home</Link>
         </li>
 
-        <li className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-white hover:text-orange-dark transition">
-          <span className="text-lg">📊</span>
-          <span className="font-medium">Reports</span>
+        <li className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-white hover:text-blue-dark transition">
+          <span className="text-lg">🛒</span>
+          <Link to="/orders" className="font-medium">Orders</Link>
         </li>
 
-        <li className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-white hover:text-red-dark transition">
-          <span className="text-lg">⚙️</span>
-          <span className="font-medium">Settings</span>
-        </li>
+       
       </ul>
     </Sidebar>
   );
 }
+
+export default SideBar;

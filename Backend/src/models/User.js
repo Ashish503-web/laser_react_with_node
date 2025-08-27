@@ -45,19 +45,39 @@ export const insertRecord = (tableName, record) => {
 };
 
 
+export const getUsersFromDB = (tableName, page = 1, limit = 10, search = "") => {
+  return new Promise((resolve, reject) => {
+    const currentPage = Math.max(Number(page), 1);
+    const currentLimit = Math.max(Number(limit), 1);
+    const offset = (currentPage - 1) * currentLimit;
 
+    // Paginated query with optional search
+    let dataQuery = `SELECT first_name, last_name, gender, id, email FROM ??`;
+    let countQuery = `SELECT COUNT(*) AS total FROM ??`;
+    const countParams = [tableName];
+    const dataParams = [tableName];
 
-export const getUsersFromDB = (tableName) => {
-     
-     return new Promise((resolve, reject) => {
-          const query = `SELECT * FROM  ${tableName}`;
-          
-          pool.query(query, (err, result ) => {
-               if(err){
-                    reject(err);
-               }else{
-                    resolve(result);
-               }
-          });
+    if (search) {
+      dataQuery += " WHERE name LIKE ?";
+      countQuery += " WHERE name LIKE ?";
+      dataParams.push(`%${search}%`);
+      countParams.push(`%${search}%`);
+    }
+
+    dataQuery += " LIMIT ? OFFSET ?";
+    dataParams.push(currentLimit, offset);
+
+    pool.query(dataQuery, dataParams, (err, dataResult) => {
+      if (err) return reject(err);
+
+      pool.query(countQuery, countParams, (err, countResult) => {
+        if (err) return reject(err);
+
+        resolve({
+          data: dataResult,
+          total: countResult[0].total,
+        });
+      });
     });
+  });
 };
