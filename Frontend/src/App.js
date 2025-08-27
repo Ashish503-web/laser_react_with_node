@@ -1,45 +1,40 @@
 import './App.css';
 import Login from './login/login.js';
+import Dashboard from './Dashboard/dashboard.js';
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from './Dashboard/dashboard.js';
-import { toast } from "react-toastify";
-
 
 function App() {
 
   const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
 
-  if (!token) {
-    toast.error("⚠️ Token not found or expired. Please login again.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return <Navigate to="/" replace />;
-  }
+    if (!token) {
+      // Redirect back to login, and send state so login can show toast
+      return <Navigate to="/" replace state={{ from: "expired" }} />;
+    }
 
-  return children;
-};
-
+    return children;
+  };
 
   return (
     <div className="App">
       <Router>
         <Routes>
-          
-          <Route path="/" element={<Login/>}/>
-          
-          <Route path="/dashboard" 
-          element={
-          <PrivateRoute>
-            <Dashboard/>
-          </PrivateRoute>
-          }/>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
-      <Login/>
-       <ToastContainer />
+
+      {/* ✅ Toast container is global */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
