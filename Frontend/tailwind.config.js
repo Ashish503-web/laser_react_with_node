@@ -30,7 +30,37 @@ module.exports = {
             },
             warning: {
                 DEFAULT: '#D1711C',
-            }
+            },
+            blue: {
+                light: '#E0F2FE',
+                DEFAULT: '#3B82F6',
+                dark: '#1E40AF',
+            },
+            violet: {
+                light: '#EDE9FE',
+                DEFAULT: '#8B5CF6',
+                dark: '#5B21B6',
+            },
+            pink: {
+                light: '#FCE7F3',
+                DEFAULT: '#EC4899',
+                dark: '#9D174D',
+            },
+            teal: {
+                light: '#CCFBF1',
+                DEFAULT: '#14B8A6',
+                dark: '#0F766E',
+            },
+            slate: {
+                light: '#F1F5F9',
+                DEFAULT: '#64748B',
+                dark: '#1E293B',
+            },
+            indigo: {
+                light: '#E0E7FF',
+                DEFAULT: '#6366F1',
+                dark: '#312E81',
+            },
         },
         extend: {
             boxShadow: {

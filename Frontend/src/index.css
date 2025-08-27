@@ -1,3 +1,19 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.p-sidebar .p-sidebar-close {
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease;
+}
+
+.p-sidebar .p-sidebar-close:hover {
+  transform: rotate(90deg) scale(1.1);
+}

@@ -10,7 +10,6 @@ function App() {
     const token = localStorage.getItem("access_token");
 
     if (!token) {
-      // Redirect back to login, and send state so login can show toast
       return <Navigate to="/" replace state={{ from: "expired" }} />;
     }
 
