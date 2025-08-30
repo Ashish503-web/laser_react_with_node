@@ -6,7 +6,6 @@ import { Button } from "primereact/button";
 import axios from "axios";
 
 const Orders = () => {
-  const hasFetched = useRef(false);
   const token = localStorage.getItem("access_token");
 
   const [users, setUsers] = useState([]);

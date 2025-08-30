@@ -62,7 +62,7 @@ const Stocks = () => {
           setGlobalFilter(value);
           if (searchRef.current) clearTimeout(searchRef.current);
           searchRef.current = setTimeout(() => {
-               setFirst(0); // Reset to first page on new search
+               setFirst(0);
           }, 500);
      };
 
