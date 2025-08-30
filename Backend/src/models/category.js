@@ -91,7 +91,7 @@ export const getCategoryFromDB = (tableName, page = 1, limit = 10, search = "") 
           const currentLimit = Math.max(Number(limit), 1);
           const offset = (currentPage - 1) * currentLimit;
 
-          let dataQuery = `SELECT name, status FROM ??`;
+          let dataQuery = `SELECT * FROM ??`;
           let countQuery = `SELECT COUNT(*) AS total FROM ??`;
           const countParams = [tableName];
           const dataParams = [tableName];

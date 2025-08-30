@@ -26,10 +26,12 @@ module.exports = {
                 dark: '#A04100',
             },
             primary: {
-                DEFAULT: '#24292E',
+                DEFAULT: "#24292E", 
+                dark: "#1B1F23",   
             },
             warning: {
-                DEFAULT: '#D1711C',
+                DEFAULT: "#D1711C", 
+                dark: "#A85611",
             },
             blue: {
                 light: '#E0F2FE',

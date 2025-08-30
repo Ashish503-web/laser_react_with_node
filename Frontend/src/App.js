@@ -8,6 +8,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Stocks from "./stocks/stocks.js";
 import Categories from "./category/category.js";
 import 'primeicons/primeicons.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const PrivateRoute = ({ children }) => {
