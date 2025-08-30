@@ -18,7 +18,7 @@ const connectDB = async () => {
     console.log("✅ Connected to MySQL database");
 
     // Auto-create ta
-        await pool.query(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         userId VARCHAR(255) UNIQUE NOT NULL,
@@ -28,19 +28,14 @@ const connectDB = async () => {
       )
     `);
 
-        await pool.query(`
-     CREATE TABLE IF NOT EXISTS demo_user_data (
-          id SERIAL PRIMARY KEY,                   -- auto-increment ID
-          first_name VARCHAR(100) NOT NULL,
-          last_name VARCHAR(100) NOT NULL,
-          email VARCHAR(150) UNIQUE NOT NULL,
-          gender VARCHAR(255),
-          password VARCHAR(255) NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
 
-    `);
+
+    await pool.query(`
+       CREATE TABLE IF NOT EXISTS categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    status TINYINT(1) DEFAULT 1
+  )`);
 
     console.log("✅ Users table is ready");
   } catch (error) {

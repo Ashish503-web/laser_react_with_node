@@ -5,6 +5,9 @@ import Dashboard from "./Dashboard/dashboard.js";
 import Orders from "./order/order.js";
 import { ToastContainer } from "react-toastify";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import Stocks from "./stocks/stocks.js";
+import Categories from "./category/category.js";
+import 'primeicons/primeicons.css';
 
 function App() {
   const PrivateRoute = ({ children }) => {
@@ -32,6 +35,8 @@ function App() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="stocks" element={<Stocks />} />
+          <Route path="categories" element={<Categories />} />
         </Route>
       </Routes>
 

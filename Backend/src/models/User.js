@@ -51,15 +51,14 @@ export const getUsersFromDB = (tableName, page = 1, limit = 10, search = "") => 
     const currentLimit = Math.max(Number(limit), 1);
     const offset = (currentPage - 1) * currentLimit;
 
-    // Paginated query with optional search
     let dataQuery = `SELECT first_name, last_name, gender, id, email FROM ??`;
     let countQuery = `SELECT COUNT(*) AS total FROM ??`;
     const countParams = [tableName];
     const dataParams = [tableName];
 
     if (search) {
-      dataQuery += " WHERE name LIKE ?";
-      countQuery += " WHERE name LIKE ?";
+      dataQuery += " WHERE first_name LIKE ?";
+      countQuery += " WHERE first_name LIKE ?";
       dataParams.push(`%${search}%`);
       countParams.push(`%${search}%`);
     }

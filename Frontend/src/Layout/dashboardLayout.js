@@ -14,7 +14,9 @@ const DashboardLayout = () => {
 
      const menuItems = [
           { label: "Dashboard", icon: "🏠", path: "/dashboard" },
-          { label: "Orders", icon: "📦", path: "/orders" }
+          { label: "Orders", icon: "📦", path: "/orders" },
+          { label: "stocks", icon: "📦", path: "/stocks"},
+          { label: "Category", icon: "📦", path: "/categories"}
      ];
 
      return (
@@ -71,7 +73,7 @@ const DashboardLayout = () => {
                {/* Main Content */}
                <div className="flex flex-col flex-1">
                     {/* Header */}
-                    <header className="flex items-center justify-between bg-teal-light px-6 py-4 shadow-md">
+                    <header className="flex items-center justify-between bg-gradient-to-b from-primary to-green-dark text-white  px-8 py-6 shadow-md">
                          <h1 className="text-xl font-bold">
                               {location.pathname.replace("/", "").toUpperCase() || "DASHBOARD"}
                          </h1>

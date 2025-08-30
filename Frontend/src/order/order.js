@@ -13,16 +13,13 @@ const Orders = () => {
   const [loading, setLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const [first, setFirst] = useState(0); // offset
-  const [rows, setRows] = useState(10);  // rows per page
+  const [first, setFirst] = useState(0); 
+  const [rows, setRows] = useState(10);  
   const [globalFilter, setGlobalFilter] = useState("");
 
   const searchRef = useRef(null);
 
   const fetchUsers = useCallback(async (page, limit, search) => {
-    if (hasFetched.current) {
-      return; // Prevents the second call in Strict Mode
-    }
 
     setLoading(true);
     try {
@@ -37,7 +34,8 @@ const Orders = () => {
 
       setUsers(res.data.data);
       setTotalRecords(res.data.total);
-      hasFetched.current = true; // Mark as fetched
+      
+      // setLoading(true);
     } catch (err) {
       console.error("Error fetching users:", err);
     } finally {
@@ -48,6 +46,12 @@ const Orders = () => {
   const onPage = (event) => {
     setFirst(event.first);
     setRows(event.rows);
+    const currentPage = Math.floor(event.first / event.rows) + 1;
+    fetchUsers(currentPage, event.rows, globalFilter);
+
+    console.log(currentPage);
+    
+    
   };
 
   const onSearchChange = (e) => {
@@ -102,7 +106,7 @@ const Orders = () => {
             header={headerTemplate}
             className="text-sm"
             rowClassName={() => "hover:bg-indigo-50 transition-colors duration-200"}
-            lazy // ⬅️ This is the key change!
+            lazy 
           >
             <Column field="id" header="ID" sortable className="font-semibold" />
             <Column field="first_name" header="first_name" sortable />
