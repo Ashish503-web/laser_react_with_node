@@ -8,11 +8,14 @@ import { InputSwitch } from "primereact/inputswitch";
 import CategoryForm from "./CategoryForm";
 import { Dialog } from "primereact/dialog";
 import { toast } from "react-toastify";
+import { confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog } from 'primereact/confirmdialog'; 
+import { Toast } from "primereact/toast";
 
 const Categories = () => {
      const token = localStorage.getItem("access_token");
      const API_BASE_URL = "http://localhost:5000/api";
-     const [users, setUsers] = useState([]);
+     const [categories, setCategories] = useState([]);
      const [loading, setLoading] = useState(false);
      const [totalRecords, setTotalRecords] = useState(0);
 
@@ -25,7 +28,7 @@ const Categories = () => {
 
      const searchRef = useRef(null);
 
-     const fetchUsers = useCallback(
+     const fetchCategories = useCallback(
           async (page, limit, search) => {
                setLoading(true);
                try {
@@ -38,7 +41,7 @@ const Categories = () => {
                          params: { page, limit, search },
                     });
 
-                    setUsers(res.data.data);
+                    setCategories(res.data.data);
                     setTotalRecords(res.data.total);
                } catch (err) {
                     console.error("Error fetching users:", err);
@@ -53,7 +56,7 @@ const Categories = () => {
           setFirst(event.first);
           setRows(event.rows);
           const currentPage = Math.floor(event.first / event.rows) + 1;
-          fetchUsers(currentPage, event.rows, globalFilter);
+          fetchCategories(currentPage, event.rows, globalFilter);
      };
 
      const onSearchChange = (e) => {
@@ -62,7 +65,7 @@ const Categories = () => {
           if (searchRef.current) clearTimeout(searchRef.current);
           searchRef.current = setTimeout(() => {
                setFirst(0);
-               fetchUsers(1, rows, value);
+               fetchCategories(1, rows, value);
           }, 500);
      };
 
@@ -83,18 +86,31 @@ const Categories = () => {
           setEdit(true);
      };
 
-     const handleDelete = async (rowData) => {
-          if (window.confirm(`Delete category "${rowData.name}"?`)) {
-               try {
-                    await axios.delete(`${API_BASE_URL}/api/categories/${rowData.id}`, {
-                         headers: { Authorization: `Bearer ${token}` },
-                    });
-                    fetchUsers(Math.floor(first / rows) + 1, rows, globalFilter);
-               } catch (error) {
-                    console.error("Delete failed:", error);
-               }
+     const handleDelete = (rowData) => {
+          confirmDialog({
+               message: `Delete Category "${rowData.name}"?`,
+               header: "Confirmation",
+               icon: "pi pi-exclamation-triangle",
+               accept: () => acceptDelete(rowData),
+               reject: () => {
+                    toast.error("Delete cancelled");
+               },
+          });
+     };
+
+     const acceptDelete = async (rowData) => {
+          try {
+               const response = await axios.delete(`${API_BASE_URL}/category/${rowData.id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+               });
+               
+               fetchCategories(Math.floor(first / rows) + 1, rows, globalFilter);
+               toast.success(response.data.message);
+          } catch (error) {
+               toast.error("Delete failed", error.response.data.error)
           }
      };
+
      const handleCreate = async (newCategory) => {
           try {
                const response = await axios.post(
@@ -107,7 +123,7 @@ const Categories = () => {
                          }
                     }
                );
-               fetchUsers(Math.floor(first / rows) + 1, rows, globalFilter);
+               fetchCategories(Math.floor(first / rows) + 1, rows, globalFilter);
                setEdit(false);
                toast.success("Category created successfully.");
                return response.data;
@@ -132,7 +148,7 @@ const Categories = () => {
                          }
                     }
                );
-               fetchUsers(Math.floor(first / rows) + 1, rows, globalFilter);
+               fetchCategories(Math.floor(first / rows) + 1, rows, globalFilter);
                setEdit(false);
                toast.success("Category update successfully.")
                return response.data;
@@ -159,8 +175,8 @@ const Categories = () => {
 
      useEffect(() => {
           const currentPage = Math.floor(first / rows) + 1;
-          fetchUsers(currentPage, rows, globalFilter);
-     }, [first, rows, globalFilter, fetchUsers]);
+          fetchCategories(currentPage, rows, globalFilter);
+     }, [first, rows, globalFilter, fetchCategories]);
 
      const headerTemplate = (
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-t-lg">
@@ -186,8 +202,10 @@ const Categories = () => {
           <div className="p-6 w-full min-h-screen bg-gray-50">
                <div className="mx-auto">
                     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                          <Toast ref={toast} /> {/* Required for PrimeReact Toast */}
+                                                  <ConfirmDialog />
                          <DataTable
-                              value={users}
+                              value={categories}
                               paginator
                               first={first}
                               rows={rows}

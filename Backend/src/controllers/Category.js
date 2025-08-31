@@ -54,6 +54,7 @@ export const addCategory = async (req, res) => {
           res.status(500).json({ error: error.message });
      }
 }
+
 export const updateCategories = async (req, res) => {
      const { id } = req.params;
      const { name, status } = req.body;
@@ -85,24 +86,23 @@ export const updateCategories = async (req, res) => {
      }
 };
 
-
 export const deleteCategories = async (req, res) => {
-     const { id } = req.query;
-     try {
-          const checkIdExits = await checkCategoryExits("categories", "id", id);
 
-          if (!checkIdExits) {
-               res.
-                    status(400).
-                    json({ error: "Category not found!" });
-               return;
-          } else {
-               await deleteCategory("categories", "id", id);
+     const { id } = req.params;
+     try {
+          const stockExists = await checkCategoryExits("categories", "id", Number(id));
+
+          if (!stockExists) {
+               return res.status(404).json({ error: "Category not found!" });
           }
+
+          await deleteCategory("categories", Number(id));
+
+          return res.status(200).json({ message: "Category deleted successfully!" });
      } catch (error) {
           res.status(500).json({ error: error.message });
      }
-}
+};
 
 export const getCategoryRecord = async (req, res) => {
      const { id } = req.params;

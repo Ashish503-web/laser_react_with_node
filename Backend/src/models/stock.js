@@ -16,9 +16,9 @@ export const createTable = (schema) => {
 };
 
 
-export const checkCategoryExits = (tableName, column, value) => {
-     return new Promise((resolve, reject) => {
-         const query = "SELECT * FROM ?? WHERE ?? = ?";
+export const checkStockExits = (tableName, column, value) => {
+    return new Promise((resolve, reject) => {
+        const query = "SELECT * FROM ?? WHERE ?? = ?";
         pool.query(query, [tableName, column, value], (err, result) => {
             if (err) {
                 reject(err);
@@ -26,8 +26,9 @@ export const checkCategoryExits = (tableName, column, value) => {
                 resolve(result.length ? result[0] : null);
             }
         });
-     });
+    });
 };
+
 
 
 
@@ -45,7 +46,7 @@ export const insertRecord = (tableName, record) => {
      });
 };
 
-export const updateCategory = (tableName, id, record) => {
+export const updateStock = (tableName, id, record) => {
   return new Promise((resolve, reject) => {
     if (!record || Object.keys(record).length === 0) {
       return resolve({ affectedRows: 0 });
@@ -67,7 +68,8 @@ export const updateCategory = (tableName, id, record) => {
   });
 };
 
-export const deleteCategory = (tableName, id) => {
+
+export const deleteStock = (tableName, id) => {
      return new Promise((resolve, reject) => {
           const query = `DELETE FROM ?? WHERE id = ?`;
 
@@ -83,38 +85,60 @@ export const deleteCategory = (tableName, id) => {
 
 
 
-export const getCategoryFromDB = (tableName, page = 1, limit = 10, search = "") => {
-     return new Promise((resolve, reject) => {
-          const currentPage = Math.max(Number(page), 1);
-          const currentLimit = Math.max(Number(limit), 1);
-          const offset = (currentPage - 1) * currentLimit;
+export const getStockFromDB = (tableName, page = 1, limit = 10, search = "") => {
+  return new Promise((resolve, reject) => {
+    const currentPage = Math.max(Number(page), 1);
+    const currentLimit = Math.max(Number(limit), 1);
+    const offset = (currentPage - 1) * currentLimit;
 
-          let dataQuery = `SELECT * FROM ??`;
-          let countQuery = `SELECT COUNT(*) AS total FROM ??`;
-          const countParams = [tableName];
-          const dataParams = [tableName];
+    let dataQuery = `
+      SELECT s.*, c.name AS category_name
+      FROM ?? AS s
+      LEFT JOIN categories AS c ON s.category = c.id
+    `;
 
-          if (search) {
-               dataQuery += " WHERE name LIKE ?";
-               countQuery += " WHERE name LIKE ?";
-               dataParams.push(`%${search}%`);
-               countParams.push(`%${search}%`);
-          }
+    let countQuery = `SELECT COUNT(*) AS total FROM ?? AS s`;
+    const countParams = [tableName];
+    const dataParams = [tableName];
 
-          dataQuery += " LIMIT ? OFFSET ?";
-          dataParams.push(currentLimit, offset);
+    if (search) {
+      dataQuery += " WHERE s.name LIKE ?";
+      countQuery += " WHERE s.name LIKE ?";
+      dataParams.push(`%${search}%`);
+      countParams.push(`%${search}%`);
+    }
 
-          pool.query(dataQuery, dataParams, (err, dataResult) => {
-               if (err) return reject(err);
+    dataQuery += " LIMIT ? OFFSET ?";
+    dataParams.push(currentLimit, offset);
 
-               pool.query(countQuery, countParams, (err, countResult) => {
-                    if (err) return reject(err);
+    pool.query(dataQuery, dataParams, (err, dataResult) => {
+      if (err) return reject(err);
 
-                    resolve({
-                         data: dataResult,
-                         total: countResult[0].total,
-                    });
-               });
-          });
-     });
+      pool.query(countQuery, countParams, (err, countResult) => {
+        if (err) return reject(err);
+
+        resolve({
+          data: dataResult,
+          total: countResult[0].total,
+        });
+      });
+    });
+  });
 };
+
+
+export const getCategories = (tableName) => {
+  return new Promise((resolve, reject) => {
+    const dataQuery = `SELECT * FROM ??`;
+    const dataParams = [tableName];
+
+    pool.query(dataQuery, dataParams, (err, dataResult) => {
+      if (err) return reject(err);
+
+      resolve({
+        data: dataResult,
+      });
+    });
+  });
+};
+
